@@ -36,11 +36,15 @@ export async function POST(request: NextRequest) {
       // Extract text using Python script
       const extractedText = await extractTextFromFile(tempFilePath);
       
+      // Optional: Preprocess the extracted text
+      const preprocessedText = await preprocessText(extractedText);
+      
       // Clean up temporary file
       await unlink(tempFilePath);
 
       return NextResponse.json({ 
-        text: extractedText,
+        text: preprocessedText,
+        rawText: extractedText, // Include raw text for comparison
         filename: file.name,
         size: file.size
       });
@@ -61,7 +65,7 @@ export async function POST(request: NextRequest) {
 
 function extractTextFromFile(filePath: string): Promise<string> {
   return new Promise((resolve, reject) => {
-    // Use direct Python call with pdfminer.six
+    // Use direct Python call with Tesseract OCR
     const pythonScript = join(process.cwd(), 'scripts', 'extract_text.py');
     const python = spawn('python3', [pythonScript, filePath]);
 
@@ -86,6 +90,41 @@ function extractTextFromFile(filePath: string): Promise<string> {
 
     python.on('error', (err) => {
       reject(new Error(`Failed to start Python process: ${err.message}`));
+    });
+  });
+}
+
+function preprocessText(text: string): Promise<string> {
+  return new Promise((resolve, reject) => {
+    // Use the preprocessing Python script
+    const pythonScript = join(process.cwd(), 'scripts', 'preprocess_text.py');
+    const python = spawn('python3', [pythonScript, text]);
+
+    let output = '';
+    let error = '';
+
+    python.stdout.on('data', (data) => {
+      output += data.toString();
+    });
+
+    python.stderr.on('data', (data) => {
+      error += data.toString();
+    });
+
+    python.on('close', (code) => {
+      if (code === 0) {
+        resolve(output.trim());
+      } else {
+        // If preprocessing fails, return original text
+        console.warn('Preprocessing failed, using original text:', error);
+        resolve(text);
+      }
+    });
+
+    python.on('error', (err) => {
+      // If preprocessing fails, return original text
+      console.warn('Preprocessing error, using original text:', err.message);
+      resolve(text);
     });
   });
 }
