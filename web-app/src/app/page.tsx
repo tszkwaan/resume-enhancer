@@ -63,7 +63,7 @@ export default function Home() {
     <div className="min-h-screen bg-amber-50 flex flex-col">
 
       {/* Main Content */}
-      <main className="flex-1 flex flex-col items-center justify-center px-6 relative overflow-hidden">
+      <main className="flex-1 flex flex-col items-center justify-center p-6 relative overflow-hidden">
         {/* Decorative Elements */}
         {/* Circle with dot - top right - moved 40px to the right (towards center) */}
         <div className="absolute top-8 right-16 md:top-12 md:right-20 md:visible invisible w-32 h-32 md:w-40 md:h-40 border-2 border-black rounded-full flex items-center justify-center z-10">
