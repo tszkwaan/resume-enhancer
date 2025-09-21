@@ -39,6 +39,13 @@ export async function POST(request: NextRequest) {
       // Optional: Preprocess the extracted text
       const preprocessedText = await preprocessText(extractedText);
       
+      // Debug: Print anonymized text to console
+      console.log('=== RAW EXTRACTED TEXT ===');
+      console.log(extractedText);
+      console.log('\n=== ANONYMIZED TEXT ===');
+      console.log(preprocessedText);
+      console.log('========================\n');
+      
       // Clean up temporary file
       await unlink(tempFilePath);
 
@@ -96,8 +103,10 @@ function extractTextFromFile(filePath: string): Promise<string> {
 
 function preprocessText(text: string): Promise<string> {
   return new Promise((resolve, reject) => {
-    // Use the preprocessing Python script
-    const pythonScript = join(process.cwd(), 'scripts', 'preprocess_text.py');
+    console.log('Starting preprocessing...');
+    
+    // Use the lightweight preprocessing Python script
+    const pythonScript = join(process.cwd(), 'scripts', 'preprocess_text_simple.py');
     const python = spawn('python3', [pythonScript, text]);
 
     let output = '';
@@ -108,11 +117,16 @@ function preprocessText(text: string): Promise<string> {
     });
 
     python.stderr.on('data', (data) => {
-      error += data.toString();
+      const stderrData = data.toString();
+      error += stderrData;
+      // Also log stderr to console for debugging
+      console.log('Python stderr:', stderrData);
     });
 
     python.on('close', (code) => {
+      console.log(`Preprocessing completed with code: ${code}`);
       if (code === 0) {
+        console.log('Preprocessing successful');
         resolve(output.trim());
       } else {
         // If preprocessing fails, return original text

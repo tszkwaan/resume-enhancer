@@ -1,1 +1,1 @@
-# No Python dependencies needed - using system Tesseract and pdftoppm
+# No external dependencies needed - using built-in Python libraries only

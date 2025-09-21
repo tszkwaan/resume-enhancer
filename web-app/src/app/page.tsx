@@ -66,12 +66,12 @@ export default function Home() {
       <main className="flex-1 flex flex-col items-center justify-center px-6 relative overflow-hidden">
         {/* Decorative Elements */}
         {/* Circle with dot - top right - moved 40px to the right (towards center) */}
-        <div className="absolute top-8 right-16 md:top-12 md:right-120 md:visible invisible w-32 h-32 md:w-40 md:h-40 border-2 border-black rounded-full flex items-center justify-center z-10">
+        <div className="absolute top-8 right-16 md:top-12 md:right-20 md:visible invisible w-32 h-32 md:w-40 md:h-40 border-2 border-black rounded-full flex items-center justify-center z-10">
           <div className="w-8 h-8 md:w-12 md:h-12 bg-black rounded-full"></div>
         </div>
         
         {/* Rotated square - bottom left - moved 15px right and 20px up (towards center) */}
-        <div className="absolute bottom-24 left-20 md:bottom-28 md:left-120 md:visible invisible w-28 h-28 md:w-36 md:h-36 border-2 border-black transform rotate-45 z-10"></div>
+        <div className="absolute bottom-24 left-120 md:bottom-28 md:left-20 md:visible invisible w-28 h-28 md:w-36 md:h-36 border-2 border-black transform rotate-45 z-10"></div>
         
         {/* Additional geometric elements for better visual balance - much larger */}
         <div className="absolute top-1/3 left-2 w-16 h-16 border border-gray-300 rounded-full opacity-15"></div>
