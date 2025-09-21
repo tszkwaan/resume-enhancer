@@ -61,15 +61,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-amber-50 flex flex-col">
-      {/* Header */}
-      <header className="flex justify-between items-center p-6">
-        <div className="text-2xl font-bold text-black font-sans">CV</div>
-        <nav className="flex space-x-8">
-          <a href="#" className="text-sm text-black font-sans hover:underline">PROCESS</a>
-          <a href="#" className="text-sm text-black font-sans hover:underline">JOURNAL</a>
-          <a href="#" className="text-sm text-black font-sans hover:underline">CONTACT</a>
-        </nav>
-      </header>
 
       {/* Main Content */}
       <main className="flex-1 flex flex-col items-center justify-center px-6 relative overflow-hidden">
@@ -93,7 +84,7 @@ export default function Home() {
         {/* Main Headline */}
         <div className="text-center mb-8">
           <h1 className="text-6xl md:text-8xl font-bold text-black font-serif mb-4">
-            Refine.
+            Resume
           </h1>
           <h1 className="text-6xl md:text-8xl font-bold text-black font-serif">
             Reinvent.
@@ -164,7 +155,7 @@ export default function Home() {
       {/* Footer */}
       <footer className="text-center py-6">
         <p className="text-sm text-gray-600 font-sans">
-          © 2023 CV ENHANCE. ALL RIGHTS RESERVED.
+          © 2025 RESUME REINVENT. ALL RIGHTS RESERVED.
         </p>
       </footer>
     </div>
