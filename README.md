@@ -38,14 +38,6 @@ resume-enhancer/
 4. **Open your browser:**
    Navigate to [http://localhost:3000](http://localhost:3000)
 
-## Features
-
-- 🎨 **Modern UI**: Clean, professional design with drag & drop file upload
-- 📄 **Multi-format Support**: Upload PDF, DOC, and DOCX files up to 5MB
-- 🔄 **Real-time Processing**: Extract text from uploaded files instantly
-- 🛡️ **File Validation**: Comprehensive file type and size validation
-- 📱 **Responsive Design**: Works on desktop and mobile devices
-
 ## Tech Stack
 
 ### Frontend
