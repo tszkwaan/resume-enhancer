@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  pdf-extractor:
+    build: .
+    volumes:
+      - ./scripts:/app/scripts
+      - ./uploads:/app/uploads
+    environment:
+      - PYTHONPATH=/app
+    command: python scripts/extract_text.py
