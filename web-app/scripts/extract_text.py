@@ -5,25 +5,9 @@ Text extraction script for CV files using Tesseract OCR for all PDFs.
 
 import sys
 from pathlib import Path
-import PyPDF2
 import subprocess
 import tempfile
 import os
-
-
-def extract_text_pypdf2(pdf_path: Path) -> str:
-	"""Extract text from PDF using PyPDF2 (for text-based PDFs)"""
-	try:
-		text_chunks = []
-		with open(pdf_path, 'rb') as file:
-			pdf_reader = PyPDF2.PdfReader(file)
-			for page in pdf_reader.pages:
-				text = page.extract_text()
-				if text and text.strip():
-					text_chunks.append(text.strip())
-		return "\n\n".join(text_chunks).strip()
-	except Exception as e:
-		raise Exception(f"PyPDF2 extraction failed: {str(e)}")
 
 
 def extract_text_tesseract(pdf_path: Path) -> str:
