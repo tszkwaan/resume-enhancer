@@ -105,8 +105,8 @@ function preprocessText(text: string): Promise<string> {
   return new Promise((resolve, reject) => {
     console.log('Starting preprocessing...');
     
-    // Use the lightweight preprocessing Python script
-    const pythonScript = join(process.cwd(), 'scripts', 'preprocess_text_simple.py');
+    // Use the personal information anonymization Python script
+    const pythonScript = join(process.cwd(), 'scripts', 'anonymize_personal_info.py');
     const python = spawn('python3', [pythonScript, text]);
 
     let output = '';
