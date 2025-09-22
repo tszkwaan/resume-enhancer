@@ -7,11 +7,18 @@ Preserves company names, job titles, and university names.
 
 import re
 import sys
-import nltk
-from nltk.corpus import stopwords
-from nltk.tokenize import word_tokenize, sent_tokenize
-from nltk.stem import WordNetLemmatizer
-from nltk.tag import pos_tag
+
+# Try to import NLTK, but don't fail if it's not available
+try:
+    import nltk
+    from nltk.corpus import stopwords
+    from nltk.tokenize import word_tokenize, sent_tokenize
+    from nltk.stem import WordNetLemmatizer
+    from nltk.tag import pos_tag
+    NLTK_IMPORT_AVAILABLE = True
+except ImportError as e:
+    NLTK_IMPORT_AVAILABLE = False
+    print(f"NLTK import failed: {e}", file=sys.stderr)
 
 # Try to import text-anonymizer, but fall back gracefully if there are issues
 try:
@@ -22,21 +29,25 @@ except ImportError as e:
     TEXT_ANONYMIZER_AVAILABLE = False
 
 # Initialize NLTK
-try:
-    # Download required NLTK data
-    nltk.download('punkt', quiet=True)
-    nltk.download('stopwords', quiet=True)
-    nltk.download('wordnet', quiet=True)
-    nltk.download('averaged_perceptron_tagger', quiet=True)
-    
-    # Initialize NLTK components
-    stop_words = set(stopwords.words('english'))
-    lemmatizer = WordNetLemmatizer()
-    NLTK_AVAILABLE = True
-    print("NLTK initialized successfully", file=sys.stderr)
-except Exception as e:
-    NLTK_AVAILABLE = False
-    print(f"NLTK not available: {e}", file=sys.stderr)
+NLTK_AVAILABLE = False
+if NLTK_IMPORT_AVAILABLE:
+    try:
+        # Download required NLTK data
+        nltk.download('punkt', quiet=True)
+        nltk.download('stopwords', quiet=True)
+        nltk.download('wordnet', quiet=True)
+        nltk.download('averaged_perceptron_tagger', quiet=True)
+        
+        # Initialize NLTK components
+        stop_words = set(stopwords.words('english'))
+        lemmatizer = WordNetLemmatizer()
+        NLTK_AVAILABLE = True
+        print("NLTK initialized successfully", file=sys.stderr)
+    except Exception as e:
+        NLTK_AVAILABLE = False
+        print(f"NLTK initialization failed, using basic cleaning: {e}", file=sys.stderr)
+else:
+    print("NLTK import failed, using basic cleaning", file=sys.stderr)
 
 
 def clean_text_nltk(text: str) -> str:
@@ -204,9 +215,12 @@ def clean_whitespace(text: str) -> str:
 
 def anonymize_with_text_anonymizer(text: str) -> str:
     """Anonymize using text-anonymizer library"""
-    if not TEXT_ANONYMIZER_AVAILABLE:
-        return anonymize_custom(text)
+    print(f"TEXT_ANONYMIZER_AVAILABLE: {TEXT_ANONYMIZER_AVAILABLE}", file=sys.stderr)
     
+    if not TEXT_ANONYMIZER_AVAILABLE:
+        print("text-anonymizer not available, using custom anonymization", file=sys.stderr)
+        return anonymize_custom(text)
+
     try:
         print("Using text-anonymizer for anonymization...", file=sys.stderr)
         result, entities = anonymize(text)
@@ -416,7 +430,9 @@ def preprocessing(text: str) -> str:
     
     # Step 2: Personal information anonymization
     print("Starting personal information anonymization...", file=sys.stderr)
+    print(f"Text before anonymization: {text[:100]}...", file=sys.stderr)
     text = anonymize_with_text_anonymizer(text)
+    print(f"Text after anonymization: {text[:100]}...", file=sys.stderr)
     
     print("Preprocessing completed", file=sys.stderr)
     return text
