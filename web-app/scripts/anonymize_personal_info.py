@@ -11,10 +11,7 @@ import sys
 # Try to import NLTK, but don't fail if it's not available
 try:
     import nltk
-    from nltk.corpus import stopwords
-    from nltk.tokenize import word_tokenize, sent_tokenize
-    from nltk.stem import WordNetLemmatizer
-    from nltk.tag import pos_tag
+    from nltk.tokenize import sent_tokenize
     NLTK_IMPORT_AVAILABLE = True
 except ImportError as e:
     NLTK_IMPORT_AVAILABLE = False
@@ -34,13 +31,6 @@ if NLTK_IMPORT_AVAILABLE:
     try:
         # Download required NLTK data
         nltk.download('punkt', quiet=True)
-        nltk.download('stopwords', quiet=True)
-        nltk.download('wordnet', quiet=True)
-        nltk.download('averaged_perceptron_tagger', quiet=True)
-        
-        # Initialize NLTK components
-        stop_words = set(stopwords.words('english'))
-        lemmatizer = WordNetLemmatizer()
         NLTK_AVAILABLE = True
         print("NLTK initialized successfully", file=sys.stderr)
     except Exception as e:
@@ -232,7 +222,6 @@ def anonymize_with_text_anonymizer(text: str) -> str:
         url_count = result.count('[ENTITY_URL_')
         
         # Also check for phone numbers that might be detected as other entities
-        phone_pattern_count = len(re.findall(r'\[ENTITY_[A-Z_]+_\d+\]', result))
         potential_phone_count = 0
         for entity in entities.values():
             if re.match(r'^\+?\d{1,4}[\s\-]?\d{3,4}[\s\-]?\d{3,4}[\s\-]?\d{3,4}$', str(entity)):
